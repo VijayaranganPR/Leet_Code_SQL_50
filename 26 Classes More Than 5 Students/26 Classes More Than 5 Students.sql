@@ -1,0 +1,12 @@
+﻿SELECT 
+	CLASS 
+FROM (
+	SELECT 
+		CLASS, 
+		COUNT(student) AS COUNTED 
+	FROM 
+		COURSES
+	GROUP BY 
+		CLASS
+	HAVING 
+		COUNT(student) >= 5) AS FILTERED
