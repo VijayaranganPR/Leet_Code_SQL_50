@@ -1,0 +1,16 @@
+﻿SELECT 
+	person_name 
+FROM 
+	QUEUE
+WHERE 
+	TURN = (
+	SELECT 
+		MAX(TURN) AS MAX_TURN 
+	FROM (
+		SELECT 
+			*,
+			SUM(weight) OVER (ORDER BY TURN) AS TOTAL
+		FROM 
+			Queue) AS TOTAL_TABLE
+		WHERE 
+			TOTAL<= 1000)
