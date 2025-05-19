@@ -1,16 +1,13 @@
-﻿select 
+﻿SELECT
 	p.product_id, 
-	isnull (
-	Round (
-		1.0 * sum(case when u.purchase_date between p.start_date and p.end_date then p.price*u.units else 0 end)
-		/ nullif(sum(case when u.purchase_date between p.start_date and p.end_date then u.units else 0 end),0)
-	,2)
-	, 0)as average_price
-from 
+	ISNULL(
+		ROUND(
+			SUM(p.price* u.units * 1.0)/ SUM(units),2),0)  AS average_price 
+FROM
 	prices p
-left join 
-	UnitsSold u
-on 
-	p.product_id = u.product_id
-group by 
+LEFT JOIN
+	unitssold u
+ON
+	p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY
 	p.product_id

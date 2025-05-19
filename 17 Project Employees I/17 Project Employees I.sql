@@ -1,4 +1,4 @@
-﻿select 
+﻿SELECT
 	p.project_id, 
 	round(
 		AVG(1.0 * experience_years)

@@ -1,13 +1,6 @@
-﻿select 
-	query_name, 
-	round(
-		sum(cast(rating as float)/position)/count(rating)
-	,2) as quality,
-	round(
-		count(case when rating < 3 then rating else null end)
-		/cast(count(rating) as float) * 100
-	, 2) as poor_query_percentage
-from 
-	queries
-group by 
-	query_name
+﻿SELECT 
+    QUERY_NAME, 
+    ROUND(AVG(RATING * 1.0/POSITION),2) AS QUALITY,
+    ROUND(SUM(CASE WHEN RATING<3 THEN 1.0 ELSE 0 END)/COUNT(RATING) * 100,2) AS poor_query_percentage
+FROM QUERIES
+GROUP BY QUERY_NAME
