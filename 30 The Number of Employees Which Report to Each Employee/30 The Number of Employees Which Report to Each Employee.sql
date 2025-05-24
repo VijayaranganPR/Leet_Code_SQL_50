@@ -1,20 +1,16 @@
-﻿select 
-	f.employee_id,
-	e.name,
-	f.reports_count,
-	f.average_age
-from (
-	SELECT 
-		E1.reports_to as employee_id, 
-		COUNT(E1.employee_id) as reports_count, 
-		round(AVG(cast(E1.age as float)),0) as average_age 
-	FROM 
-		Employees E1
-	GROUP BY 
-		E1.reports_to
-	HAVING 
-		E1.reports_to IS NOT NULL) as f 
-left join 
-	Employees e
-on 
-	f.employee_id = e.employee_id
+﻿SELECT 
+	E2.EMPLOYEE_ID, 
+	E2.NAME, 
+	COUNT(E1.NAME) AS reports_count, 
+	ROUND(SUM(E1.AGE*1.0)/COUNT(E2.NAME),0) AS average_age 
+FROM 
+	EMPLOYEES E1
+JOIN 
+	EMPLOYEES E2
+ON 
+	E1.REPORTS_TO = E2.EMPLOYEE_ID
+GROUP BY 
+	E2.EMPLOYEE_ID, 
+	E2.NAME
+ORDER BY 
+	E2.EMPLOYEE_ID

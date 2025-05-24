@@ -1,27 +1,25 @@
-﻿with distinct_Table as (
-	select 
-		distinct product_id as distinct_id 
-	from 
-		Products
-),
-Filtered_Table as (
-	select 
-		*,
-		ROW_NUMBER () over (partition by product_id order by change_date desc) as rn 
-	from 
-		Products
-	where 
-		change_date <= '2019-08-16'
+﻿WITH TEMP AS (
+	SELECT
+		*, 
+		ROW_NUMBER() OVER (PARTITION BY PRODUCT_ID ORDER BY CHANGE_DATE DESC) AS RN
+	FROM 
+		PRODUCTS
+	WHERE 
+		CHANGE_DATE <= '2019-08-16'
 )
 
-select 
-	d.distinct_id product_id, 
-	case when rn = 1 then f.new_price else 10 end as  price 
-from 
-	distinct_Table d
-full join 
-	Filtered_Table f
-on 
-	d.distinct_id = f.product_id
-where 
-	rn = 1 or rn is null
+SELECT 
+	P.PRODUCT_ID, 
+	ISNULL(NEW_PRICE,10) AS PRICE 
+FROM (
+	SELECT 
+		DISTINCT PRODUCT_ID
+	FROM 
+		PRODUCTS
+	) AS P
+LEFT JOIN 
+	TEMP T
+ON 
+	P.PRODUCT_ID = T.PRODUCT_ID
+WHERE 
+	RN = 1 OR RN IS NULL

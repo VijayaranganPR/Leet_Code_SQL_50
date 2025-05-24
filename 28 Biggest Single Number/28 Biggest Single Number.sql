@@ -1,8 +1,8 @@
 ﻿SELECT 
-	max(num) as num 
+	MAX(num) AS num 
 from (
 	SELECT NUM, 
-	COUNT(NUM) as num_count 
+	COUNT(NUM) AS num_count 
 FROM 
 	MyNumbers
 GROUP BY 
