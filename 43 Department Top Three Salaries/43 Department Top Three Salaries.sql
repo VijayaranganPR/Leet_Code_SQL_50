@@ -1,20 +1,20 @@
-SELECT
-        Department,
-        Employee,
-        Salary
-FROM (
-        SELECT
-                d.Name AS Department,
-                e.Name AS Employee,
-                e.Salary,
-                DENSE_RANK() OVER (PARTITION BY d.Name ORDER BY e.Salary DESC) AS rnk
-        FROM
-                Employee e
-        JOIN
-                Department d
-        ON
-                e.DepartmentId = d.Id
-) AS ranked
+﻿WITH temp AS (
+	SELECT 
+		*,
+		DENSE_RANK() OVER (PARTITION BY departmentid ORDER BY salary DESC) AS RANKING
+	FROM
+		Employee
+)
+
+SELECT 
+	d.name AS Department,
+	t.name AS Employee,
+	t.salary 
+FROM
+	temp t
+LEFT JOIN
+	Department d
+ON 
+	t.departmentId = d.id
 WHERE
-        rnk <= 3
-;
+	t.RANKING <= 3
